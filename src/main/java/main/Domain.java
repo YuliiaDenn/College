@@ -47,7 +47,7 @@ public class Domain {
 
 //		college.getSubjectByID(2);
 //		college.getSubjectByFullName("Maths");
-//		college.getAllSubjects();
+		college.getAllSubjects();
 
 //		Teacher teacher3 = new Teacher();
 //		teacher3 = college.getTeacherByID(8);
