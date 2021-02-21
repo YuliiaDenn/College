@@ -57,7 +57,7 @@ public class Domain {
 		
 //		college.deleteSubjectFromTeacher(8, 11);
 
-//		college.getAllSubjectsFromTeacher(1);
+		college.getAllSubjectsFromTeacher(1);
 		
 //		college.getAllTeacherFromSubject(6);
 		
