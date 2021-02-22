@@ -6,11 +6,16 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import entity.Subject;
 import entity.Teacher;
 
 public class TeacherDaoImpl extends Dao implements TeacherDao {
+
+	private SubjectDao subjectDao = new SubjectDaoImpl();
 
 	public void addTeacher(Teacher teacher) {
 		Connection conn = getConnection();
@@ -77,6 +82,7 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		Statement stat = null;
 		String sql = "SELECT * FROM teacher  WHERE idteacher = '" + id + "'";
 		Teacher teacher = new Teacher();
+		Set<Subject> subjects = new HashSet<Subject>();
 		try {
 			stat = conn.createStatement();
 			ResultSet rs = stat.executeQuery(sql);
@@ -85,6 +91,10 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 			teacher.setLastName(rs.getString(2));
 			teacher.setName(rs.getString(3));
 			teacher.setSurname(rs.getString(4));
+			while (rs.next()) {
+				Subject subject = subjectDao.getSubjectById(rs.getInt(1));
+				subjects.add(subject);
+			}
 			System.out.println("Teacher " + teacher);
 			stat.close();
 			conn.close();
@@ -101,7 +111,7 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		Connection conn = getConnection();
 		Statement stat = null;
 		String sql = "SELECT * FROM teacher WHERE last_name = '" + lastName + "'AND name = '" + name
-				+ "' AND surname = '" + surname + "' LIMIT 1";
+				+ "' AND surname = '" + surname + "' LIMIT 1 ";
 		Teacher teacher = new Teacher();
 		try {
 			stat = conn.createStatement();
@@ -111,7 +121,9 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 			teacher.setLastName(rs.getString(2));
 			teacher.setName(rs.getString(3));
 			teacher.setSurname(rs.getString(4));
+
 			System.out.println("Teacher " + teacher);
+
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
@@ -128,6 +140,7 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		Statement stat = null;
 		String sql = "SELECT * FROM teacher";
 		List<Teacher> teachers = new ArrayList<Teacher>();
+		Set<Subject> subjects = new HashSet<Subject>();
 		try {
 			stat = conn.createStatement();
 			ResultSet rs = stat.executeQuery(sql);
@@ -137,6 +150,10 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 				teacher.setLastName(rs.getString(2));
 				teacher.setName(rs.getString(3));
 				teacher.setSurname(rs.getString(4));
+				while (rs.next()) {
+					Subject subject = subjectDao.getSubjectById(rs.getInt(1));
+					subjects.add(subject);
+				}
 				teachers.add(teacher);
 			}
 			System.out.println("All teachers: " + teachers);
@@ -147,6 +164,67 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		}
 
 		return teachers;
+	}
+
+	public void addSubjectToTeacher(Teacher teacher, Subject subject) {
+		Connection conn = getConnection();
+		Statement stat = null;
+		String sql = "INSERT  INTO teacher_subject (teacher_id, subject_id) " + "SELECT t.idteacher, s.idsubject "
+				+ "FROM teacher t, subject s " + "WHERE t.idteacher =  '" + teacher.getId() + "' AND s.idsubject = '"
+				+ subject.getId() + "'";
+		try {
+			stat = conn.createStatement();
+			stat.executeUpdate(sql);
+			System.out.println("Created a pair of " + teacher + " - " + subject + "!");
+			stat.close();
+			conn.close();
+		} catch (SQLIntegrityConstraintViolationException e) {
+			System.out.println("The pair of " + teacher + " - " + subject + " goes there at the base!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void deleteSubjectFromTeacher(int idTeacher, int idSubject) {
+		Connection conn = getConnection();
+		Statement stat = null;
+		String sql = "DELETE FROM teacher_subject WHERE teacher_id = '" + idTeacher + "' AND subject_id = '" + idSubject
+				+ "'";
+		try {
+			stat = conn.createStatement();
+			stat.executeUpdate(sql);
+			System.out.println("Deleted!");
+			stat.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public Set<Subject> getAllSubjectsFromTeacher(int id) {
+		Connection conn = getConnection();
+		Statement stat = null;
+		String sql = "SELECT subject_id FROM teacher_subject WHERE teacher_id = '" + id + "'";
+		Set<Subject> subjects = new HashSet<Subject>();
+		Teacher teacher = new Teacher();
+		try {
+			stat = conn.createStatement();
+			ResultSet rs = stat.executeQuery(sql);
+
+			while (rs.next()) {
+				Subject subject = subjectDao.getSubjectById(rs.getInt(1));
+				subjects.add(subject);
+			}
+			System.out.println("All subjects from " + teacher.getId() + ": " + subjects);
+			stat.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return subjects;
 	}
 
 }

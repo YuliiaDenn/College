@@ -25,7 +25,7 @@ public class Domain {
 //		college.getTeacherByID(30);
 //		college.deleteTeacher(10);
 
-//		college.getTeacherByFullName("Petrov", "Petro", "Petrovych");
+//		college.getTeacherByFullName("Ivanov", "Ivan", "Ivanovych");
 //		college.getTeacherByFullName(" ", " ", " ");
 //		college.getAllTeachers();
 
@@ -47,7 +47,7 @@ public class Domain {
 
 //		college.getSubjectByID(2);
 //		college.getSubjectByFullName("Maths");
-		college.getAllSubjects();
+//		college.getAllSubjects();
 
 //		Teacher teacher3 = new Teacher();
 //		teacher3 = college.getTeacherByID(8);
@@ -57,7 +57,7 @@ public class Domain {
 		
 //		college.deleteSubjectFromTeacher(8, 11);
 
-//		college.getAllSubjectsFromTeacher(1);
+		college.getAllSubjectsFromTeacher(1);
 		
 //		college.getAllTeacherFromSubject(6);
 		

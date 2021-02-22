@@ -9,14 +9,14 @@ public class Subject {
 		super();
 	}
 
-	public Subject(String name) {
-		super();
-		this.name = name;
-	}
-
 	public Subject(int id, String name) {
 		super();
 		this.id = id;
+		this.name = name;
+	}
+
+	public Subject(String name) {
+		super();
 		this.name = name;
 	}
 
@@ -68,5 +68,4 @@ public class Subject {
 	public String toString() {
 		return "Subject [id=" + id + ", name=" + name + "]";
 	}
-
 }
