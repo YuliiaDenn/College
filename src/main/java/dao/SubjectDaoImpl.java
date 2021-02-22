@@ -6,9 +6,12 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import entity.Subject;
+import entity.Teacher;
 
 public class SubjectDaoImpl extends Dao implements SubjectDao {
 
@@ -132,6 +135,65 @@ public class SubjectDaoImpl extends Dao implements SubjectDao {
 			conn.close();
 		} catch (SQLException e) {
 			System.out.println("Subjects table is empty!");
+		}
+		return subjects;
+	}
+
+	public void addTeacherToSubject(Subject subject, Teacher teacher) {
+		Connection conn = getConnection();
+		Statement stat = null;
+		String sql = "INSERT  INTO teacher_subject (teacher_id, subject_id) " + "SELECT t.idteacher, s.idsubject "
+				+ "FROM teacher t, subject s " + "WHERE t.idteacher =  '" + teacher.getId() + "' AND s.idsubject = '"
+				+ subject.getId() + "'";
+		try {
+			stat = conn.createStatement();
+			stat.executeUpdate(sql);
+			System.out.println("Created a pair of " + teacher + " - " + subject + "!");
+			stat.close();
+			conn.close();
+		} catch (SQLIntegrityConstraintViolationException e) {
+			System.out.println("The pair of " + teacher + " - " + subject + " goes there at the base!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	public void deleteTeacherFromSubject(int idSubject, int idTeacher) {
+		Connection conn = getConnection();
+		Statement stat = null;
+		String sql = "DELETE FROM teacher_subject WHERE teacher_id = '" + idTeacher + "' AND subject_id = '" + idSubject
+				+ "'";
+		try {
+			stat = conn.createStatement();
+			stat.executeUpdate(sql);
+			System.out.println("Deleted!");
+			stat.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@Override
+	public Set<Subject> getAllSubjectsByTeacher(int id) {
+		Connection conn = getConnection();
+		Statement stat = null;
+		String sql = "select s.idsubject, s.name from subject s, teacher_subject ts where ts.teacher_id = " + id
+				+ " and s.idsubject = ts.subject_id";
+		Set<Subject> subjects = new HashSet<Subject>();
+		try {
+			stat = conn.createStatement();
+			ResultSet rs = stat.executeQuery(sql);
+			while (rs.next()) {
+				subjects.add(new Subject(rs.getInt(1), rs.getString(2)));
+			}
+			System.out.println("All subjects from taecher: " + subjects);
+			stat.close();
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		return subjects;
 	}

@@ -1,5 +1,7 @@
 package entity;
 
+import java.util.Set;
+
 public class Teacher {
 
 	private int id;
@@ -11,16 +13,16 @@ public class Teacher {
 		super();
 	}
 
-	public Teacher(int id, String lastName, String name, String surname) {
+	public Teacher(String lastName, String name, String surname) {
 		super();
-		this.id = id;
 		this.lastName = lastName;
 		this.name = name;
 		this.surname = surname;
 	}
 
-	public Teacher(String lastName, String name, String surname) {
+	public Teacher(int id, String lastName, String name, String surname) {
 		super();
+		this.id = id;
 		this.lastName = lastName;
 		this.name = name;
 		this.surname = surname;

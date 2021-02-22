@@ -24,6 +24,6 @@ public interface TeacherDao {
 
 	void addSubjectToTeacher(Teacher teacher, Subject subject);
 
-	Set<Subject> getAllSubjectsFromTeacher(int id);
+	Set<Teacher> getAllTeachersBySubject(int id);
 
 }

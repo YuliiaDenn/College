@@ -7,8 +7,6 @@ import dao.SubjectDao;
 import dao.SubjectDaoImpl;
 import dao.TeacherDao;
 import dao.TeacherDaoImpl;
-import dao.TeacherSubjectDao;
-import dao.TeacherSubjectDaoImpl;
 import entity.Subject;
 import entity.Teacher;
 
@@ -16,7 +14,6 @@ public class Service {
 
 	TeacherDao teacherDao = new TeacherDaoImpl();
 	SubjectDao subjectDao = new SubjectDaoImpl();
-	TeacherSubjectDao teachSubDao = new TeacherSubjectDaoImpl();
 
 	public void addTeacher(Teacher teacher) {
 		teacherDao.addTeacher(teacher);
@@ -67,18 +64,31 @@ public class Service {
 	}
 
 	public void addSubjectToTeacher(Teacher teacher, Subject subject) {
-		teachSubDao.addSubjectToTeacher(teacher, subject);
+		teacherDao.addSubjectToTeacher(teacher, subject);
+	}
+
+	public void addTeacherToSubject(Subject subject, Teacher teacher) {
+		subjectDao.addTeacherToSubject(subject, teacher);
 	}
 
 	public void deleteSubjectFromTeacher(int idTeacher, int idSubject) {
-		teachSubDao.deleteSubjectFromTeacher(idTeacher, idSubject);
+		teacherDao.deleteSubjectFromTeacher(idTeacher, idSubject);
 	}
 
-	public Set<Subject> getAllSubjectsFromTeacher(int id) {
-		return teachSubDao.getAllSubjectsFromTeacher(id);
+	public void deleteTeacherFromSubject(int idSubject, int idTeacher) {
+		teacherDao.deleteSubjectFromTeacher(idTeacher, idSubject);
 	}
 
-	public Set<Teacher> getAllTeacherFromSubject(int id) {
-		return teachSubDao.getAllTeacherFromSubject(id);
+	public Set<Subject> getAllSubjectsFromTeacher(Teacher teacher) {
+		int id = teacherDao.getTeacherByFullName(teacher.getLastName(), teacher.getName(), teacher.getSurname())
+				.getId();
+		Set<Subject> subjects = subjectDao.getAllSubjectsByTeacher(id);
+		return subjects;
+	}
+
+	public Set<Teacher> getAllTeacherFromSubject(Subject subject) {
+		int id = subjectDao.getSubjectByName(subject.getName()).getId();
+		Set<Teacher> teachers = teacherDao.getAllTeachersBySubject(id);
+		return teachers;
 	}
 }

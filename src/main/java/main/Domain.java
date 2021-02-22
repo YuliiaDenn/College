@@ -1,5 +1,8 @@
 package main;
 
+import java.util.List;
+
+import dao.TeacherDao;
 import entity.Subject;
 import entity.Teacher;
 import service.Service;
@@ -37,7 +40,7 @@ public class Domain {
 //		subject2 = college.getSubjectByFullName("vvv");
 //		subject2.setName("Maths");
 //		college.updateSubject(subject2);
-		
+
 //		Subject subject2 = new Subject();
 //		subject2 = college.getSubjectByID(14);
 //		subject2.setName("Chemistry");
@@ -50,17 +53,25 @@ public class Domain {
 //		college.getAllSubjects();
 
 //		Teacher teacher3 = new Teacher();
-//		teacher3 = college.getTeacherByID(8);
+//		teacher3 = college.getTeacherByID(16);
 //		Subject subject3 = new Subject();
-//		subject3 = college.getSubjectByID(11);
+//		subject3 = college.getSubjectByID(4);
 //		college.addSubjectToTeacher(teacher3, subject3);
-		
-//		college.deleteSubjectFromTeacher(8, 11);
+//		college.addTeacherToSubject(subject3, teacher3);
 
-		college.getAllSubjectsFromTeacher(1);
-		
-//		college.getAllTeacherFromSubject(6);
-		
+//		college.deleteSubjectFromTeacher(8, 11);
+//		college.deleteTeacherFromSubject(6, 6);
+
+//		college.getAllSubjectsFromTeacher(1);
+//
+//		Subject subject4 = new Subject();
+//		subject4 = college.getSubjectByID(6);
+//
+//		Teacher teacher = college.getTeacherByID(1);
+//		college.getAllSubjectsFromTeacher(teacher);
+//
+//		Subject subject = college.getSubjectByFullName("Maths");
+//		college.getAllTeacherFromSubject(subject);
 
 	}
 

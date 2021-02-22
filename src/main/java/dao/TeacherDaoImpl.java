@@ -15,7 +15,14 @@ import entity.Teacher;
 
 public class TeacherDaoImpl extends Dao implements TeacherDao {
 
-	private SubjectDao subjectDao = new SubjectDaoImpl();
+	SubjectDao subjectDao;
+
+	public TeacherDaoImpl() {
+
+		if (subjectDao == null) {
+			subjectDao = new SubjectDaoImpl();
+		}
+	}
 
 	public void addTeacher(Teacher teacher) {
 		Connection conn = getConnection();
@@ -82,7 +89,6 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		Statement stat = null;
 		String sql = "SELECT * FROM teacher  WHERE idteacher = '" + id + "'";
 		Teacher teacher = new Teacher();
-		Set<Subject> subjects = new HashSet<Subject>();
 		try {
 			stat = conn.createStatement();
 			ResultSet rs = stat.executeQuery(sql);
@@ -91,10 +97,7 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 			teacher.setLastName(rs.getString(2));
 			teacher.setName(rs.getString(3));
 			teacher.setSurname(rs.getString(4));
-			while (rs.next()) {
-				Subject subject = subjectDao.getSubjectById(rs.getInt(1));
-				subjects.add(subject);
-			}
+
 			System.out.println("Teacher " + teacher);
 			stat.close();
 			conn.close();
@@ -140,20 +143,17 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		Statement stat = null;
 		String sql = "SELECT * FROM teacher";
 		List<Teacher> teachers = new ArrayList<Teacher>();
-		Set<Subject> subjects = new HashSet<Subject>();
 		try {
 			stat = conn.createStatement();
 			ResultSet rs = stat.executeQuery(sql);
-			Teacher teacher = new Teacher();
+			Teacher teacher;
 			while (rs.next()) {
+				teacher = new Teacher();
 				teacher.setId(rs.getInt(1));
 				teacher.setLastName(rs.getString(2));
 				teacher.setName(rs.getString(3));
 				teacher.setSurname(rs.getString(4));
-				while (rs.next()) {
-					Subject subject = subjectDao.getSubjectById(rs.getInt(1));
-					subjects.add(subject);
-				}
+
 				teachers.add(teacher);
 			}
 			System.out.println("All teachers: " + teachers);
@@ -203,28 +203,27 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 
 	}
 
-	public Set<Subject> getAllSubjectsFromTeacher(int id) {
+	public Set<Teacher> getAllTeachersBySubject(int id) {
 		Connection conn = getConnection();
 		Statement stat = null;
-		String sql = "SELECT subject_id FROM teacher_subject WHERE teacher_id = '" + id + "'";
-		Set<Subject> subjects = new HashSet<Subject>();
-		Teacher teacher = new Teacher();
+		String sql = "SELECT t.idteacher, t.last_name, t.name, t.surname FROM teacher t, teacher_subject ts WHERE ts.subject_id = '"
+				+ id + "' AND t.idteacher = ts.teacher_id";
+		Set<Teacher> teachers = new HashSet<Teacher>();
 		try {
 			stat = conn.createStatement();
 			ResultSet rs = stat.executeQuery(sql);
 
 			while (rs.next()) {
-				Subject subject = subjectDao.getSubjectById(rs.getInt(1));
-				subjects.add(subject);
+				teachers.add(new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
 			}
-			System.out.println("All subjects from " + teacher.getId() + ": " + subjects);
+
+			System.out.println("All teachers from subject: " + teachers);
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 
-		return subjects;
+		return teachers;
 	}
-
 }

@@ -1,8 +1,10 @@
 package dao;
 
 import java.util.List;
+import java.util.Set;
 
 import entity.Subject;
+import entity.Teacher;
 
 public interface SubjectDao {
 
@@ -17,5 +19,11 @@ public interface SubjectDao {
 	Subject getSubjectByName(String name);
 
 	List<Subject> getAllSubjects();
+
+	void addTeacherToSubject(Subject subject, Teacher teacher);
+
+	void deleteTeacherFromSubject(int idSubject, int idTeacher);
+
+	Set<Subject> getAllSubjectsByTeacher(int id);
 
 }
