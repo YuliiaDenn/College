@@ -22,11 +22,8 @@ public class SubjectDaoImpl extends Dao implements SubjectDao {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			System.out.println("Subject " + subject + " added!");
 			stat.close();
 			conn.close();
-		} catch (SQLIntegrityConstraintViolationException e) {
-			System.out.println("Subject " + subject.getName() + " goes there at the base!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -42,13 +39,8 @@ public class SubjectDaoImpl extends Dao implements SubjectDao {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			System.out.println("Subject updated!");
-			System.out.println("New subject: " + subject);
 			stat.close();
 			conn.close();
-		} catch (SQLIntegrityConstraintViolationException e) {
-			System.out.println("Record not changed!");
-			System.out.println("Subject " + subject.getName() + " goes there at the base!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -62,13 +54,11 @@ public class SubjectDaoImpl extends Dao implements SubjectDao {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			System.out.println("Subject deleted!");
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	public Subject getSubjectById(int id) {
@@ -83,7 +73,6 @@ public class SubjectDaoImpl extends Dao implements SubjectDao {
 			rs.next();
 			subject.setId(rs.getInt(1));
 			subject.setName(rs.getString(2));
-			System.out.println("Subject " + subject);
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
@@ -105,7 +94,6 @@ public class SubjectDaoImpl extends Dao implements SubjectDao {
 			rs.next();
 			subject.setId(rs.getInt(1));
 			subject.setName(rs.getString(2));
-			System.out.println("Subject " + subject);
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
@@ -130,11 +118,10 @@ public class SubjectDaoImpl extends Dao implements SubjectDao {
 				subject.setName(rs.getString(2));
 				subjects.add(subject);
 			}
-			System.out.println("All subjects: " + subjects);
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
-			System.out.println("Subjects table is empty!");
+			e.printStackTrace();
 		}
 		return subjects;
 	}
@@ -148,11 +135,8 @@ public class SubjectDaoImpl extends Dao implements SubjectDao {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			System.out.println("Created a pair of " + teacher + " - " + subject + "!");
 			stat.close();
 			conn.close();
-		} catch (SQLIntegrityConstraintViolationException e) {
-			System.out.println("The pair of " + teacher + " - " + subject + " goes there at the base!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -167,7 +151,6 @@ public class SubjectDaoImpl extends Dao implements SubjectDao {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			System.out.println("Deleted!");
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
@@ -189,7 +172,6 @@ public class SubjectDaoImpl extends Dao implements SubjectDao {
 			while (rs.next()) {
 				subjects.add(new Subject(rs.getInt(1), rs.getString(2)));
 			}
-			System.out.println("All subjects from taecher: " + subjects);
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {

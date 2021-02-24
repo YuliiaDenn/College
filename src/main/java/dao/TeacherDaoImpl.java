@@ -15,15 +15,6 @@ import entity.Teacher;
 
 public class TeacherDaoImpl extends Dao implements TeacherDao {
 
-	SubjectDao subjectDao;
-
-	public TeacherDaoImpl() {
-
-		if (subjectDao == null) {
-			subjectDao = new SubjectDaoImpl();
-		}
-	}
-
 	public void addTeacher(Teacher teacher) {
 		Connection conn = getConnection();
 		Statement stat = null;
@@ -32,12 +23,8 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			System.out.println("Teacher " + teacher + " added!");
 			stat.close();
 			conn.close();
-		} catch (SQLIntegrityConstraintViolationException e) {
-			System.out.println("Teacher " + teacher.getLastName() + " " + teacher.getName() + " " + teacher.getSurname()
-					+ " goes there at the base!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -53,14 +40,8 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			System.out.println("Teacher updated!");
-			System.out.println("New teacher: " + teacher);
 			stat.close();
 			conn.close();
-		} catch (SQLIntegrityConstraintViolationException e) {
-			System.out.println("Record not changed!");
-			System.out.println("Teacher " + teacher.getLastName() + " " + teacher.getName() + " " + teacher.getSurname()
-					+ " goes there at the base!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -75,7 +56,6 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			System.out.println("Teacher deleted!");
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
@@ -97,8 +77,6 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 			teacher.setLastName(rs.getString(2));
 			teacher.setName(rs.getString(3));
 			teacher.setSurname(rs.getString(4));
-
-			System.out.println("Teacher " + teacher);
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
@@ -124,9 +102,6 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 			teacher.setLastName(rs.getString(2));
 			teacher.setName(rs.getString(3));
 			teacher.setSurname(rs.getString(4));
-
-			System.out.println("Teacher " + teacher);
-
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
@@ -156,11 +131,10 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 
 				teachers.add(teacher);
 			}
-			System.out.println("All teachers: " + teachers);
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
-			System.out.println("Teachers table is empty!");
+			e.printStackTrace();
 		}
 
 		return teachers;
@@ -175,11 +149,8 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			System.out.println("Created a pair of " + teacher + " - " + subject + "!");
 			stat.close();
 			conn.close();
-		} catch (SQLIntegrityConstraintViolationException e) {
-			System.out.println("The pair of " + teacher + " - " + subject + " goes there at the base!");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -194,7 +165,6 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 		try {
 			stat = conn.createStatement();
 			stat.executeUpdate(sql);
-			System.out.println("Deleted!");
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
@@ -216,8 +186,6 @@ public class TeacherDaoImpl extends Dao implements TeacherDao {
 			while (rs.next()) {
 				teachers.add(new Teacher(rs.getInt(1), rs.getString(2), rs.getString(3), rs.getString(4)));
 			}
-
-			System.out.println("All teachers from subject: " + teachers);
 			stat.close();
 			conn.close();
 		} catch (SQLException e) {
